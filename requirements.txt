@@ -1,0 +1,5 @@
+flake8
+charmhelpers
+fixtures
+coverage
+testtools
