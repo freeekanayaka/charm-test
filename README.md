@@ -1,15 +1,43 @@
-Create fake juju hook tools for charm unit testing
+# Overview
+
 [![Build Status](https://travis-ci.org/freeekanayaka/charmfixture.svg?branch=master)](https://travis-ci.org/freeekanayaka/charmfixture)
 
-Provide a fixture to create fake juju hook tools script that can be used
-for unit-testing charms.
+Python [fixtures](https://github.com/testing-cabal/fixtures) for faking
+out the boundaries of a Juju charm and allow convenient unit-testing.
 
+The boundaries are typically executables (e.g. Juju hook tools), network
+and file system.
 
-### Building
+# Examples
 
-    $ make build
+## Juju hook tools
 
+The JujuHookTools fixture set the PATH environment variable to point
+to a temporary directory where fake juju hook tools executables are
+saved.
 
-### Testing
-
-    $ make test
+You can programmatically modify the backend juju data that the tools
+will return.
+    
+    from testtools import TestCase
+    
+    from charmhelpers.core import hookenv
+    
+    from charmfixture.tools import JujuHookTools
+    
+    
+    class MyCharmTest(TestCase):
+    
+        def setUp(self):
+            super().setUp()
+            self.tools = self.useFixture(JujuHookTools())
+    
+        def test_log(self):
+            """Inspect log lines emitted by your charm code."""
+            hookenv.log("Hello world!")
+            self.assertEqual("INFO: Hello world!", self.tools.log[0])
+    
+        def test_config(self):
+            """Set config values for your charm code."""
+            self.tools.config["foo"] = "bar"
+            self.assertEqual("bar", hookenv.config()["foo"])

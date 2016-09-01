@@ -1,4 +1,5 @@
 import os
+import sys
 
 from fixtures import (
     Fixture,
@@ -55,7 +56,7 @@ class JujuHookTools(Fixture):
 
     def _write_tool(self, name, klass):
         code = HOOK_TOOL_CODE.format(
-            python=os.path.join(os.environ["VIRTUAL_ENV"], "bin", "python"),
+            python=sys.executable,
             module=klass.__module__,
             klass=klass.__name__,
             tools_dir=self._tools_dir.path)
