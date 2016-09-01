@@ -17,7 +17,7 @@ from .log import (
 )
 
 
-HOOK_TOOL_CODE = """#!/usr/bin/python3
+HOOK_TOOL_CODE = """#!{python}
 import sys
 
 from {module} import {klass}
@@ -54,9 +54,10 @@ class JujuHookTools(Fixture):
         self.log = LogData(LogTool.path(self._tools_dir.path))
 
     def _write_tool(self, name, klass):
-
         code = HOOK_TOOL_CODE.format(
-            module=klass.__module__, klass=klass.__name__,
+            python=os.path.join(os.environ["VIRTUAL_ENV"], "bin", "python"),
+            module=klass.__module__,
+            klass=klass.__name__,
             tools_dir=self._tools_dir.path)
 
         with open(self._tools_dir.join(name), "w") as fd:
