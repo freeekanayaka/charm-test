@@ -19,25 +19,27 @@ saved.
 You can programmatically modify the backend juju data that the tools
 will return.
     
-    from testtools import TestCase
+```python
+from testtools import TestCase
     
-    from charmhelpers.core import hookenv
-    
-    from charmfixture.tools import JujuHookTools
-    
-    
-    class MyCharmTest(TestCase):
-    
-        def setUp(self):
-            super().setUp()
-            self.tools = self.useFixture(JujuHookTools())
-    
-        def test_log(self):
-            """Inspect log lines emitted by your charm code."""
-            hookenv.log("Hello world!")
-            self.assertEqual("INFO: Hello world!", self.tools.log[0])
-    
-        def test_config(self):
-            """Set config values for your charm code."""
-            self.tools.config["foo"] = "bar"
-            self.assertEqual("bar", hookenv.config()["foo"])
+from charmhelpers.core import hookenv
+
+from charmfixture.tools import JujuHookTools
+
+
+class MyCharmTest(TestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.tools = self.useFixture(JujuHookTools())
+
+    def test_log(self):
+        """Inspect log lines emitted by your charm code."""
+        hookenv.log("Hello world!")
+        self.assertEqual("INFO: Hello world!", self.tools.log[0])
+
+    def test_config(self):
+        """Set config values for your charm code."""
+        self.tools.config["foo"] = "bar"
+        self.assertEqual("bar", hookenv.config()["foo"])
+```
