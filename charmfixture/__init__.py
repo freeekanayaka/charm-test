@@ -1,6 +1,6 @@
-from .tools import JujuToolsFixture
+from .tools import JujuHookTools
 
 
 __all__ = [
-    "JujuToolsFixture",
+    "JujuHookTools",
 ]
