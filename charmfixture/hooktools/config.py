@@ -15,7 +15,7 @@ class ConfigData():
 
     @classmethod
     def path(cls):
-        return os.path.join(os.environ["CHARM_DIR"], ".config_get.data")
+        return os.path.join(os.environ["CHARM_DIR"], ".config-get.data")
 
     def __setitem__(self, key, value):
         self._read()

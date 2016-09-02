@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+import sys
+
+from charmfixture.hooktools.port import PortTool
+
+tool = PortTool()
+tool.run(sys.argv[1:])

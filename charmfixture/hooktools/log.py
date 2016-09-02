@@ -14,7 +14,7 @@ class LogData():
 
     @classmethod
     def path(cls):
-        return os.path.join(os.environ["CHARM_DIR"], ".juju_log.data")
+        return os.path.join(os.environ["CHARM_DIR"], ".juju-log.data")
 
     def __iter__(self):
         with open(self.path()) as fd:
