@@ -11,7 +11,7 @@ class PortTool():
         return os.path.join(os.environ["CHARM_DIR"], ".open-port.data")
 
     def run(self, args):
-        with open(PortData.path(), "w") as fd:
+        with open(self.path(), "w") as fd:
             fd.write(args[0])
 
 tool = PortTool()
