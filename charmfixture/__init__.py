@@ -1,6 +1,6 @@
-from .tools import JujuHookTools
+from .hooktools.fixture import HookTools
 
 
 __all__ = [
-    "JujuHookTools",
+    "HookTools",
 ]

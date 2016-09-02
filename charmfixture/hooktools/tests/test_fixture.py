@@ -9,16 +9,17 @@ from fixtures import EnvironmentVariable
 
 from testtools import TestCase
 
-from charmfixture.tools import JujuHookTools
+from charmfixture.hooktools.fixture import HookTools
 
-PYTHONPATH = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+PYTHONPATH = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 
-class JujuHookToolsTest(TestCase):
+class HookToolsTest(TestCase):
 
     def setUp(self):
         super().setUp()
-        self.tools = JujuHookTools()
+        self.tools = HookTools()
         self.useFixture(self.tools)
         # Export the python path so the generated script code can
         # import our modules.
