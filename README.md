@@ -10,9 +10,9 @@ and file system.
 
 # Examples
 
-## Juju hook tools
+## Hook tools
 
-The JujuHookTools fixture set the PATH environment variable to point
+The HookTools fixture set the PATH environment variable to point
 to a temporary directory where fake juju hook tools executables are
 saved.
 
@@ -24,14 +24,14 @@ from testtools import TestCase
     
 from charmhelpers.core import hookenv
 
-from charmfixture.tools import JujuHookTools
+from charmfixture import HookTools
 
 
 class MyCharmTest(TestCase):
 
     def setUp(self):
         super().setUp()
-        self.tools = self.useFixture(JujuHookTools())
+        self.tools = self.useFixture(HookTools())
 
     def test_log(self):
         """Inspect log lines emitted by your charm code."""

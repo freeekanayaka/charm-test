@@ -1,7 +1,7 @@
 from testtools import TestCase
 from fixtures import TempDir
 
-from charmfixture.log import LogData
+from charmfixture.hooktools.log import LogData
 
 
 class LogDataTest(TestCase):

@@ -3,7 +3,7 @@ import json
 from testtools import TestCase
 from fixtures import TempDir
 
-from charmfixture.config import ConfigData
+from charmfixture.hooktools.config import ConfigData
 
 
 class ConfigDataTest(TestCase):

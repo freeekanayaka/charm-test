@@ -28,7 +28,7 @@ tool.run(sys.argv[1:])
 """
 
 
-class JujuHookTools(Fixture):
+class HookTools(Fixture):
     """Provide fake versions of juju hook tools."""
 
     _tools = {
