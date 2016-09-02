@@ -8,6 +8,7 @@ from fixtures import (
 
 from .config import ConfigData
 from .log import LogData
+from .port import PortData
 
 BIN = os.path.join(os.path.dirname(__file__), "bin")
 
@@ -28,3 +29,4 @@ class HookTools(Fixture):
 
         self.config = ConfigData()
         self.log = LogData()
+        self.port = PortData()
