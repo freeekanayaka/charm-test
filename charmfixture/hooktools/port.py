@@ -22,10 +22,3 @@ class PortData():
 
     def __getitem__(self, index):
         return list(self)[index]
-
-
-class PortTool():
-
-    def run(self, args):
-        with open(PortData.path(), "w") as fd:
-            fd.write(args[0])

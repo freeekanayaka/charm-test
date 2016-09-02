@@ -1,8 +1,18 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
+import os
 import sys
 
-from charmfixture.hooktools.port import PortTool
+
+class PortTool():
+
+    @classmethod
+    def path(cls):
+        return os.path.join(os.environ["CHARM_DIR"], ".open-port.data")
+
+    def run(self, args):
+        with open(PortData.path(), "w") as fd:
+            fd.write(args[0])
 
 tool = PortTool()
 tool.run(sys.argv[1:])

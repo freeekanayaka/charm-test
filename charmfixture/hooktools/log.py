@@ -1,5 +1,4 @@
 import os
-import argparse
 
 
 class LogData():
@@ -23,15 +22,3 @@ class LogData():
 
     def __getitem__(self, index):
         return list(self)[index]
-
-
-class LogTool():
-
-    def run(self, args):
-        parser = argparse.ArgumentParser()
-        parser.add_argument("message")
-        parser.add_argument("-l", default="INFO", dest="level")
-        args = parser.parse_args(args)
-
-        with open(LogData.path(), "w") as fd:
-            fd.write("{}: {}\n".format(args.level, args.message))

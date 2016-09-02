@@ -1,8 +1,19 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
+import os
 import sys
 
-from charmfixture.hooktools.config import ConfigTool
+
+class ConfigTool():
+
+    @classmethod
+    def path(cls):
+        return os.path.join(os.environ["CHARM_DIR"], ".config-get.data")
+
+    def run(self, args):
+        with open(self.path()) as fd:
+            print(fd.read())
+
 
 tool = ConfigTool()
 tool.run(sys.argv[1:])
