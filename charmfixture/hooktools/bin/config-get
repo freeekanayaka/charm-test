@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+import sys
+
+from charmfixture.hooktools.config import ConfigTool
+
+tool = ConfigTool()
+tool.run(sys.argv[1:])

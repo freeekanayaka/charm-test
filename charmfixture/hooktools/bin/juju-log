@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+import sys
+
+from charmfixture.hooktools.log import LogTool
+
+tool = LogTool()
+tool.run(sys.argv[1:])

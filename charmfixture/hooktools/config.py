@@ -9,13 +9,13 @@ class ConfigData():
     meant to be read by the fake config-get hook tool.
     """
 
-    def __init__(self, path):
-        """
-        @param path: Path to the backend json file.
-        """
-        self._path = path
+    def __init__(self):
         self._data = {}
         self._write()
+
+    @classmethod
+    def path(cls):
+        return os.path.join(os.environ["CHARM_DIR"], ".config_get.data")
 
     def __setitem__(self, key, value):
         self._read()
@@ -31,23 +31,16 @@ class ConfigData():
         self._write()
 
     def _write(self):
-        with open(self._path, "w") as fd:
+        with open(self.path(), "w") as fd:
             fd.write(json.dumps(self._data))
 
     def _read(self):
-        with open(self._path) as fd:
+        with open(self.path()) as fd:
             self._data = (json.loads(fd.read()))
 
 
 class ConfigTool():
 
-    def __init__(self, tools_dir):
-        self._tools_dir = tools_dir
-
-    @classmethod
-    def path(cls, tools_dir):
-        return os.path.join(tools_dir, ".config.json")
-
     def run(self, args):
-        with open(self.path(self._tools_dir)) as fd:
+        with open(ConfigData.path()) as fd:
             print(fd.read())
