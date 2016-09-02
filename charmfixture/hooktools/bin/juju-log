@@ -1,8 +1,24 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 import sys
+import os
+import argparse
 
-from charmfixture.hooktools.log import LogTool
+
+class LogTool():
+
+    @classmethod
+    def path(cls):
+        return os.path.join(os.environ["CHARM_DIR"], ".juju-log.data")
+
+    def run(self, args):
+        parser = argparse.ArgumentParser()
+        parser.add_argument("message")
+        parser.add_argument("-l", default="INFO", dest="level")
+        args = parser.parse_args(args)
+
+        with open(self.path(), "w") as fd:
+            fd.write("{}: {}\n".format(args.level, args.message))
 
 tool = LogTool()
 tool.run(sys.argv[1:])

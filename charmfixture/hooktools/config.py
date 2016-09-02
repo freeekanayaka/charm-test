@@ -37,10 +37,3 @@ class ConfigData():
     def _read(self):
         with open(self.path()) as fd:
             self._data = (json.loads(fd.read()))
-
-
-class ConfigTool():
-
-    def run(self, args):
-        with open(ConfigData.path()) as fd:
-            print(fd.read())
