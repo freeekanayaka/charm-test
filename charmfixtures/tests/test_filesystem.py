@@ -33,3 +33,16 @@ class FilesystemTest(TestCase):
         with open(path, "w") as fd:
             self.assertRaises(
                 PermissionError, os.fchown, fd.fileno(), 12345, 9999)
+
+    def test_chown(self):
+        path = str(self.filesystem.root.joinpath("foo"))
+        os.makedirs(path)
+        os.chown(path, 123, 456)
+        self.assertEqual(123, self.filesystem.uid[path])
+        self.assertEqual(456, self.filesystem.gid[path])
+
+    def test_chown_real(self):
+        temp_dir = self.useFixture(TempDir())
+        path = temp_dir.join("foo")
+        os.makedirs(path)
+        self.assertRaises(PermissionError, os.chown, path, 12345, 9999)
