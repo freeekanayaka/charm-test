@@ -5,7 +5,7 @@ from subprocess import (
 
 from testtools import TestCase
 
-from charmfixture.hooktools.fixture import HookTools
+from charmfixtures.hooktools.fixture import HookTools
 
 
 class HookToolsTest(TestCase):

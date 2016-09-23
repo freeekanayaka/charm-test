@@ -2,7 +2,7 @@ import grp
 
 from testtools import TestCase
 
-from charmfixture.groups import Groups
+from charmfixtures.groups import Groups
 
 
 class GroupsTest(TestCase):

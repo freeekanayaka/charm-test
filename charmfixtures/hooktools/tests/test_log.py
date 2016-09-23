@@ -4,7 +4,7 @@ from fixtures import (
     EnvironmentVariable,
 )
 
-from charmfixture.hooktools.log import LogData
+from charmfixtures.hooktools.log import LogData
 
 
 class LogDataTest(TestCase):
