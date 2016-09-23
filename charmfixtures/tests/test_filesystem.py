@@ -13,7 +13,8 @@ class FilesystemTest(TestCase):
         self.filesystem = self.useFixture(Filesystem())
 
     def test_root_dir_environment_variable(self):
-        self.assertEqual(str(self.filesystem.root), os.environ["ROOT_DIR"])
+        self.assertEqual(
+            str(self.filesystem.root), os.environ["TEST_ROOT_DIR"])
 
     def test_add(self):
         self.filesystem.add("foo/bar", "egg")

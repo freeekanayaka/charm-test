@@ -15,7 +15,7 @@ class Filesystem(Fixture):
 
     def _setUp(self):
         self.root = Path(self.useFixture(TempDir()).path)
-        self.useFixture(EnvironmentVariable("ROOT_DIR", str(self.root)))
+        self.useFixture(EnvironmentVariable("TEST_ROOT_DIR", str(self.root)))
 
         self.uid = {}
         self.gid = {}
