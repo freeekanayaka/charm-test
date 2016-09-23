@@ -19,7 +19,9 @@ class HookToolsTest(TestCase):
 
     def test_log(self):
         check_call(["juju-log", "hello world"])
+        check_call(["juju-log", "-l", "DEBUG", "how are you?"])
         self.assertEqual("INFO: hello world", self.tools.log[0])
+        self.assertEqual("DEBUG: how are you?", self.tools.log[1])
 
     def test_port(self):
         check_call(["open-port", "1234/TCP"])
