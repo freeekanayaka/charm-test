@@ -12,8 +12,7 @@ class HookToolsTest(TestCase):
 
     def setUp(self):
         super().setUp()
-        self.tools = HookTools()
-        self.useFixture(self.tools)
+        self.tools = self.useFixture(HookTools())
 
     def test_config(self):
         self.assertEqual(b"{}\n", check_output(["config-get"]))
