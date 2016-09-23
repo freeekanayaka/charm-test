@@ -3,7 +3,7 @@ import os
 from testtools import TestCase
 from fixtures import TempDir
 
-from charmfixture.filesystem import Filesystem
+from charmfixtures.filesystem import Filesystem
 
 
 class FilesystemTest(TestCase):
@@ -13,7 +13,7 @@ class FilesystemTest(TestCase):
         self.filesystem = self.useFixture(Filesystem())
 
     def test_root_dir_environment_variable(self):
-        self.assertEqual(self.filesystem.root.path, os.environ["ROOT_DIR"])
+        self.assertEqual(str(self.filesystem.root), os.environ["ROOT_DIR"])
 
     def test_add(self):
         self.filesystem.add("foo/bar", "egg")

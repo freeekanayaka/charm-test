@@ -6,7 +6,7 @@ from fixtures import (
     EnvironmentVariable,
 )
 
-from charmfixture.hooktools.config import ConfigData
+from charmfixtures.hooktools.config import ConfigData
 
 
 class ConfigDataTest(TestCase):
