@@ -15,7 +15,7 @@ class Filesystem(Fixture):
 
     def _setUp(self):
         self.root = Path(self.useFixture(TempDir()).path)
-        self.useFixture(EnvironmentVariable("ROOT_DIR", self.root.path))
+        self.useFixture(EnvironmentVariable("ROOT_DIR", str(self.root)))
 
         self.uid = {}
         self.gid = {}
@@ -29,7 +29,7 @@ class Filesystem(Fixture):
             be created relative to the root directory in any case).
         """
         for path in paths:
-            os.makedirs(os.path.join(self.root.path, path.lstrip(os.sep)))
+            os.makedirs(str(self.root.joinpath(path.lstrip(os.sep))))
 
     def contains(self, path):
         """Return True if path is a subpath of this filesystem."""
