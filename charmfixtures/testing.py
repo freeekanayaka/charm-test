@@ -8,7 +8,7 @@ from charmfixtures.users import Users
 from charmfixtures.groups import Groups
 from charmfixtures.hooktools.fixture import HookTools
 
-hookenv = try_import("from charmhelpers.core.hookenv")
+hookenv = try_import("charmhelpers.core.hookenv")
 
 
 class CharmTest(TestCase):
