@@ -1,6 +1,6 @@
 # Overview
 
-[![Build Status](https://travis-ci.org/freeekanayaka/charmfixture.svg?branch=master)](https://travis-ci.org/freeekanayaka/charmfixture)
+[![Build Status](https://travis-ci.org/freeekanayaka/charm-fixtures.svg?branch=master)](https://travis-ci.org/freeekanayaka/charm-fixtures)
 
 Python [fixtures](https://github.com/testing-cabal/fixtures) for faking
 out the boundaries of a Juju charm and allow convenient unit-testing.
