@@ -14,7 +14,6 @@ setup(
     name="charmfixtures",
     version="0.1.0",
     packages=find_packages(),
-    package_data={"charmfixtures.hooktools": ['bin/*']},
 
     install_requires=install_requires,
     extras_require=dict(
