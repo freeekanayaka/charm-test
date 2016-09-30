@@ -8,38 +8,27 @@ out the boundaries of a Juju charm and allow convenient unit-testing.
 The boundaries are typically executables (e.g. Juju hook tools), network
 and file system.
 
-# Examples
+# Example
 
-## Hook tools
-
-The HookTools fixture set the PATH environment variable to point
-to a temporary directory where fake juju hook tools executables are
-saved.
-
-You can programmatically modify the backend juju data that the tools
-will return.
+The `CharmTest` base class sets up all available charm fixtures, so you can
+for example programmatically modify backend juju data that hook tools
+will return, create fake system users or groups, etc.
     
 ```python
-from testtools import TestCase
-    
+from charmfixtures import CharmTest
+
 from charmhelpers.core import hookenv
 
-from charmfixture import HookTools
 
-
-class MyCharmTest(TestCase):
-
-    def setUp(self):
-        super().setUp()
-        self.tools = self.useFixture(HookTools())
+class MyCharmTest(CharmTest):
 
     def test_log(self):
         """Inspect log lines emitted by your charm code."""
         hookenv.log("Hello world!")
-        self.assertEqual("INFO: Hello world!", self.tools.log[0])
+        self.assertEqual("INFO: Hello world!", self.unit.log[0])
 
     def test_config(self):
         """Set config values for your charm code."""
-        self.tools.config["foo"] = "bar"
+        self.application.config["foo"] = "bar"
         self.assertEqual("bar", hookenv.config()["foo"])
 ```
