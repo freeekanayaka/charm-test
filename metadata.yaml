@@ -1,0 +1,5 @@
+name: test
+summary: Test charm
+maintainer: John Doh <john@example.com>
+description: |
+  Metadata for the test charm.

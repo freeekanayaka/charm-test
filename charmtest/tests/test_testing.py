@@ -1,4 +1,5 @@
 import os
+import json
 
 from subprocess import (
     check_output,
@@ -20,9 +21,14 @@ class MyCharmTest(CharmTest):
         self.assertIn("CHARM_DIR", os.environ)
         self.assertTrue(os.path.isdir(os.environ["CHARM_DIR"]))
 
+    def test_juju_config_default(self):
+        config = json.loads(check_output(["config-get"]).decode("utf-8"))
+        self.assertEqual({"foo": "abc", "bar": 123}, config)
+
     def test_juju_config(self):
         self.application.config["foo"] = "bar"
-        self.assertEqual(b'{"foo": "bar"}\n', check_output(["config-get"]))
+        config = json.loads(check_output(["config-get"]).decode("utf-8"))
+        self.assertEqual("bar", config["foo"])
 
     def test_log(self):
         check_call(["juju-log", "hello world"])
