@@ -43,12 +43,18 @@ utilities to execute hook tools, you can have tests like:
 ...
 ...    def test_charm_logic(self):
 ...        """Invoke our charm logic and inspect the resulting backend state."""
+...        # Setup the fake Juju backend application config.
 ...        self.application.config["foo"] = "bar"
+...
+...        # Run charm code.
 ...        some_charm_logic()
+...
+...        # Perform assertions against the fake Juju backend.
 ...        self.assertEqual("INFO: Hello world!", self.unit.log[0])
 ...        self.assertEqual("bar", hookenv.config()["foo"])
 ...        self.assertEqual({1234}, self.unit.ports["TCP"])
 ...        self.assertTrue(hookenv.charm_dir().startswith(gettempdir()))
+>>>
 >>>
 >>> HookToolsTest(methodName="test_charm_logic").run().wasSuccessful()
 True
