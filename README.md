@@ -104,3 +104,30 @@ by fake code that modifies fake data:
 True
 
 ```
+
+## Services
+
+The `CharmTest` base class adds a fake `systemctl` process to track starting
+and stopping services:
+
+```python
+>>> def example_charm_logic():
+...     host.service_start("app")
+>>>
+>>>
+>>> class ExampleTest(CharmTest):
+...
+...    def test_charm_logic(self):
+...        """Invoke our charm logic and inspect the resulting backend state."""
+...
+...        # Run our charm code.
+...        example_charm_logic()
+...
+...        # Perform assertions against the services backend.
+...        self.assertEqual("started", self.services["app"])
+>>>
+>>>
+>>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+True
+
+```

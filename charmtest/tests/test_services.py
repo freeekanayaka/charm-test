@@ -1,0 +1,28 @@
+from testtools import TestCase
+
+from charmtest.services import Systemctl
+
+
+class ConfigGetTest(TestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.services = {}
+        self.process = Systemctl(self.services)
+
+    def test_stop(self):
+        self.process({"args": ["systemctl", "stop", "foo"]})
+        self.assertEqual("stopped", self.services["foo"])
+
+    def test_start(self):
+        self.process({"args": ["systemctl", "start", "foo"]})
+        self.assertEqual("started", self.services["foo"])
+
+    def test_is_active(self):
+        self.process({"args": ["systemctl", "start", "foo"]})
+        result = self.process({"args": ["systemctl", "is-active", "foo"]})
+        self.assertEqual(0, result["returncode"])
+
+    def test_is_not_active(self):
+        result = self.process({"args": ["systemctl", "is-active", "foo"]})
+        self.assertEqual(1, result["returncode"])
