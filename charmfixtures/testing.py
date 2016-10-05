@@ -3,6 +3,11 @@ from testtools import (
     try_import,
 )
 
+from fixtures import (
+    EnvironmentVariable,
+    TempDir,
+)
+
 from charmfixtures.filesystem import Filesystem
 from charmfixtures.users import Users
 from charmfixtures.groups import Groups
@@ -26,6 +31,8 @@ class CharmTest(TestCase):
         self.users = self.useFixture(Users())
         self.groups = self.useFixture(Groups())
         self.processes = self.useFixture(Processes())
+        temp_dir = self.useFixture(TempDir())
+        self.useFixture(EnvironmentVariable("CHARM_DIR", temp_dir.path))
 
         self.application = Application()
         self.unit = Unit()
