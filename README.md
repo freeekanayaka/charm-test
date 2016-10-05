@@ -79,11 +79,11 @@ utilities to execute hook tools, you can have tests like:
 ...        self.application.config["foo"] = "bar"
 ...
 ...        # Run our charm code.
-...        example_charm_logic()
+...        result = example_charm_logic()
 ...
 ...        # Perform assertions against the fake Juju backend.
 ...        self.assertEqual("INFO: Hello world!", self.unit.log[0])
-...        self.assertEqual("bar", hookenv.config()["foo"])
+...        self.assertEqual("bar", result)
 ...        self.assertEqual({1234}, self.unit.ports["TCP"])
 >>>
 >>>
