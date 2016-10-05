@@ -38,8 +38,8 @@ expects:
 ...    def test_charm_logic(self):
 ...        """Invoke our charm logic and inspect the results."""
 ...        result = example_charm_logic()
-...        self.assertEqual(self.application.name, result[0])
-...        self.assertEqual(self.unit.name, result[1])
+...        self.assertEqual("test", result[0])
+...        self.assertEqual("test/0", result[1])
 ...        self.assertThat(result[2], DirExists())
 >>>
 >>>
