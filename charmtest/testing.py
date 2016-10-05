@@ -8,11 +8,11 @@ from fixtures import (
     TempDir,
 )
 
-from charmfixtures.filesystem import Filesystem
-from charmfixtures.users import Users
-from charmfixtures.groups import Groups
-from charmfixtures.processes import Processes
-from charmfixtures.juju import (
+from charmtest.filesystem import Filesystem
+from charmtest.users import Users
+from charmtest.groups import Groups
+from charmtest.processes import Processes
+from charmtest.juju import (
     Application,
     Unit,
     ConfigGet,

@@ -1,6 +1,6 @@
 from testtools import TestCase
 
-from charmfixtures.juju.hooktools import (
+from charmtest.juju.hooktools import (
     ConfigGet,
     JujuLog,
 )

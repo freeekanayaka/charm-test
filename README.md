@@ -15,7 +15,7 @@ for example programmatically modify backend juju data that hook tools
 will return, create fake system users or groups, etc.
 
 ```python
->>> from charmfixtures import CharmTest
+>>> from charmtest import CharmTest
 >>>
 >>> from charmhelpers.core import hookenv
 >>>

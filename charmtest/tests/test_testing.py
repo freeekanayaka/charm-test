@@ -5,7 +5,7 @@ from subprocess import (
     check_call,
 )
 
-from charmfixtures.testing import CharmTest
+from charmtest.testing import CharmTest
 
 
 class MyCharmTest(CharmTest):

@@ -3,7 +3,7 @@ import os
 from testtools import TestCase
 from fixtures import TempDir
 
-from charmfixtures.filesystem import Filesystem
+from charmtest.filesystem import Filesystem
 
 
 class FilesystemTest(TestCase):
