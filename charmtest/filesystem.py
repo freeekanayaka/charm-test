@@ -2,6 +2,11 @@ import os
 
 from pathlib import Path
 
+from testtools.matchers import (
+    AfterPreprocessing,
+    Equals,
+)
+
 from fixtures import (
     Fixture,
     EnvironmentVariable,
@@ -33,6 +38,10 @@ class Filesystem(Fixture):
         for path in paths:
             os.makedirs(str(self.root.joinpath(path.lstrip(os.sep))))
 
+    def join(self, *segments):
+        """Join the given segments with the filesystem root."""
+        return str(self.root.joinpath(*segments))
+
     def contains(self, path):
         """Return True if path is a subpath of this filesystem."""
         return self.root in Path(path).parents
@@ -61,3 +70,10 @@ class Filesystem(Fixture):
             self.gid[path] = gid
         else:
             self._real_fchown(fileno, uid, gid)
+
+    def hasOwner(self, uid, gid):
+
+        def owner(path):
+            return self.uid[path], self.gid[path]
+
+        return AfterPreprocessing(owner, Equals((uid, gid)))
