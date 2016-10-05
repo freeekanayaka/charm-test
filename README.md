@@ -14,7 +14,7 @@ and file system.
 
 The `CharmTest` base class uses an [EnvironmentVariable](https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/environ.py)
 fixture to set the environment variables that the charm code runtime
-expects:
+expects (for instance when calling the associated `charmhelpers` APIs):
 
 
 ```python
@@ -26,7 +26,6 @@ expects:
 >>>
 >>>
 >>> def example_charm_logic():
-...     """Make use of Juju environment variables (via charmhelpers)."""
 ...     return {
 ...         "service-name": hookenv.service_name(),
 ...         "local-unit": hookenv.local_unit(),
