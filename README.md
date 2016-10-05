@@ -77,10 +77,10 @@ be executed in unit tests, that typically run as unpriviliged user:
 >>>
 >>>
 >>> def example_charm_logic(root):
-...     path = root.joinpath("etc", "app", "app.conf")
-...     with path.open("w") as fd:
+...     path = os.path.join(root, "etc", "app", "app.conf")
+...     with open(path, "w") as fd:
 ...         fd.write("hello")
-...     os.chown(str(path), 0, 0)
+...     os.chown(path, 0, 0)
 >>>
 >>>
 >>> class ExampleTest(CharmTest):
@@ -92,7 +92,7 @@ be executed in unit tests, that typically run as unpriviliged user:
 ...        self.filesystem.add("etc/app/")
 ...
 ...        # Run our charm code.
-...        example_charm_logic(self.filesystem.root)
+...        example_charm_logic(str(self.filesystem.root))
 ...
 ...        # Perform assertions against the fake filesystem backend.
 ...        path = self.filesystem.join("etc", "app", "app.conf")
