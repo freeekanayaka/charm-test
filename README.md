@@ -26,11 +26,12 @@ expects:
 >>>
 >>>
 >>> def example_charm_logic():
-...     return [
-...         hookenv.service_name(),
-...         hookenv.local_unit(),
-...         hookenv.charm_dir(),
-...     ]
+...     """Make use of Juju environment variables (via charmhelpers)."""
+...     return {
+...         "service-name": hookenv.service_name(),
+...         "local-unit": hookenv.local_unit(),
+...         "charm-dir": hookenv.charm_dir(),
+...     }
 >>>
 >>>
 >>> class ExampleTest(CharmTest):
@@ -38,9 +39,9 @@ expects:
 ...    def test_charm_logic(self):
 ...        """Invoke our charm logic and inspect the results."""
 ...        result = example_charm_logic()
-...        self.assertEqual("test", result[0])
-...        self.assertEqual("test/0", result[1])
-...        self.assertThat(result[2], DirExists())
+...        self.assertEqual("test", result["service-name"])
+...        self.assertEqual("test/0", result["local-unit"])
+...        self.assertThat(result["charm-dir"], DirExists())
 >>>
 >>>
 >>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
@@ -101,21 +102,26 @@ charm under test. Charm metadata, default config values and templates will
 be made available to the underlying tests:
 
 ```python
+>>> import os
+>>>
 >>> def example_charm_logic():
-...     return [
-...        hookenv.metadata()["summary"],
-...        hookenv.config()["foo"],
-...        os.path.exists(os.path.join(hookenv.charm_dir(), "templates")),
-...     ]
+...     return {
+...        "summary": hookenv.metadata()["summary"],
+...        "config-foo": hookenv.config()["foo"],
+...        "has-templates-dir": os.path.exists(os.path.join(hookenv.charm_dir(), "templates")),
+...     }
 >>>
 >>>
 >>> class ExampleTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
 ...        """Invoke our charm logic and inspect the results."""
-
 ...        result = example_charm_logic()
-...        self.assertEqual(["Test charm", "bar", True], result)
+...        self.assertEqual({
+...            "summary": "Test charm",
+...            "config-foo": "abc",
+...            "has-templates-dir": True},
+...            result)
 >>>
 >>>
 >>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
@@ -135,8 +141,6 @@ is used to capture calls to Python's `os.chown` and `os.fchown`, so they can
 be executed in unit tests, that typically run as unpriviliged user:
 
 ```python
->>> import os
->>>
 >>> from charmhelpers.core import templating
 >>>
 >>> from testtools.matchers import FileContains
