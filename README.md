@@ -56,7 +56,7 @@ utilities to execute hook tools, you can have tests like:
 >>>
 >>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
 True
->>>
+
 ```
 
 ## Filesystem, users and groups.
@@ -102,5 +102,5 @@ by fake code that modifies fake data:
 >>>
 >>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
 True
->>>
+
 ```
