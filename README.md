@@ -125,6 +125,7 @@ and stopping services:
 ...
 ...        # Perform assertions against the services backend.
 ...        self.assertEqual("started", self.services["app"])
+...        self.assertTrue(host.service_running("app"))
 >>>
 >>>
 >>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
