@@ -6,7 +6,6 @@ from testtools import (
 from fixtures import (
     EnvironmentVariable,
     TempDir,
-    MonkeyPatch,
 )
 
 from charmtest.filesystem import Filesystem
@@ -23,8 +22,6 @@ from charmtest.juju import (
 
 hookenv = try_import("charmhelpers.core.hookenv")
 
-PLATFORM = ('Ubuntu', '16.04', 'xenial')
-
 
 class CharmTest(TestCase):
 
@@ -36,11 +33,6 @@ class CharmTest(TestCase):
         self.processes = self.useFixture(Processes())
         temp_dir = self.useFixture(TempDir())
         self.useFixture(EnvironmentVariable("CHARM_DIR", temp_dir.path))
-
-        # Force Ubuntu as platform, since charmhelpers doesn't like
-        # 'debian' (which is what you get on Travis).
-        self.useFixture(
-            MonkeyPatch("platform.linux_distribution", lambda: PLATFORM))
 
         self.application = Application()
         self.unit = Unit()

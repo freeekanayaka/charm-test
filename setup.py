@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 
 
 install_requires = [
-    "fixtures >= 0.3.6",
+    "fixtures >= 3.0.1",
     ]
 
 setup(

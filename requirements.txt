@@ -1,5 +1,5 @@
 flake8
-git+git://github.com/freeekanayaka/fixtures@master#egg=fixtures
+git+git://github.com/freeekanayaka/fixtures@master#egg=fixtures-3.0.1
 coverage
 testtools
 charmhelpers
