@@ -1,3 +1,5 @@
+import os
+
 from subprocess import (
     check_output,
     check_call,
@@ -13,6 +15,10 @@ class MyCharmTest(CharmTest):
         self.assertTrue(self.groups)
         self.assertTrue(self.users)
         self.assertTrue(self.processes)
+
+    def test_charm_dir(self):
+        self.assertIn("CHARM_DIR", os.environ)
+        self.assertTrue(os.path.isdir(os.environ["CHARM_DIR"]))
 
     def test_juju_config(self):
         self.application.config["foo"] = "bar"
