@@ -11,6 +11,7 @@ from fixtures import (
 from charmtest.filesystem import Filesystem
 from charmtest.users import Users
 from charmtest.groups import Groups
+from charmtest.services import Systemctl
 from charmtest.processes import Processes
 from charmtest.juju import (
     Application,
@@ -36,10 +37,12 @@ class CharmTest(TestCase):
 
         self.application = Application()
         self.unit = Unit()
+        self.services = {}
 
         self.processes.add(ConfigGet(self.application.config))
         self.processes.add(JujuLog(self.unit.log))
         self.processes.add(OpenPort(self.unit.ports))
+        self.processes.add(Systemctl(self.services))
 
         # If charmhelpers is around, clear its config cache.
         hookenv and hookenv.cache.clear()
