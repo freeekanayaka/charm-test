@@ -59,17 +59,61 @@ True
 
 ```
 
-## Filesystem, users and groups.
+## Filesystem
 
-The `CharmTest` base class also uses a [MonkeyPatch](https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/monkeypatch.py)
-fixture to mock out calls to Python's `grp.getpwnam` and `grp.getgrnam`.
+The `CharmTest` base class also uses a [TempDir](https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/tempdir.py)
+fixture to create a temporary directory to use as filesystem "root". The idea
+is that charm code should be factored in a way that it writes or reads files
+using paths relative to a certain root.
+
+A [MonkeyPatch](https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/monkeypatch.py)
+is used to capture calls to Python's `os.chown` and `os.fchown`, so they can
+be executed in unit tests, that typically run as unpriviliged user:
+
+```python
+>>> import os
+>>>
+>>>
+>>> def example_charm_logic(root):
+...     path = root.joinpath("etc", "app", "app.conf")
+...     with path.open("w") as fd:
+...         fd.write("hello")
+...     os.chown(str(path), 0, 0)
+>>>
+>>>
+>>> class ExampleTest(CharmTest):
+...
+...    def test_charm_logic(self):
+...        """Invoke our charm logic and inspect the resulting backend state."""
+...
+...        # Setup the etc directory in fake filesystem root.
+...        self.filesystem.add("etc/app/")
+...
+...        # Run our charm code.
+...        example_charm_logic(self.filesystem.root)
+...
+...        # Perform assertions against the fake filesystem backend.
+...        path = self.filesystem.root.joinpath("etc", "app", "app.conf")
+...        with path.open() as fd:
+...            self.assertEqual("hello", fd.read())
+...        self.assertEqual(0, self.filesystem.uid[str(path)])
+...        self.assertEqual(0, self.filesystem.gid[str(path)])
+>>>
+>>>
+>>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+True
+
+```
+
+## Users and groups
+
+The `CharmTest` base class mocks out calls to Python's `grp.getpwnam`
+and `grp.getgrnam`.
 
 Like in the Juju hook tools case above, calls to these APIs will be handled
 by fake code that modifies fake data:
 
 ```python
->>> import os
->>>
 >>> from charmhelpers.core import host
 >>>
 >>>
