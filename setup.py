@@ -11,7 +11,7 @@ install_requires = [
     ]
 
 setup(
-    name="charmfixtures",
+    name="charmtest",
     version="0.1.0",
     packages=find_packages(),
 

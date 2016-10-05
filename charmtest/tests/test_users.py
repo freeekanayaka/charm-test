@@ -2,7 +2,7 @@ import pwd
 
 from testtools import TestCase
 
-from charmfixtures.users import Users
+from charmtest.users import Users
 
 
 class UsersTest(TestCase):
