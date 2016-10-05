@@ -73,6 +73,8 @@ be executed in unit tests, that typically run as unpriviliged user:
 ```python
 >>> import os
 >>>
+>>> from testtools.matchers import FileContains
+>>>
 >>>
 >>> def example_charm_logic(root):
 ...     path = root.joinpath("etc", "app", "app.conf")
@@ -93,11 +95,9 @@ be executed in unit tests, that typically run as unpriviliged user:
 ...        example_charm_logic(self.filesystem.root)
 ...
 ...        # Perform assertions against the fake filesystem backend.
-...        path = self.filesystem.root.joinpath("etc", "app", "app.conf")
-...        with path.open() as fd:
-...            self.assertEqual("hello", fd.read())
-...        self.assertEqual(0, self.filesystem.uid[str(path)])
-...        self.assertEqual(0, self.filesystem.gid[str(path)])
+...        path = self.filesystem.join("etc", "app", "app.conf")
+...        self.assertThat(path, FileContains("hello"))
+...        self.assertThat(path, self.filesystem.hasOwner(0, 0))
 >>>
 >>>
 >>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
@@ -118,7 +118,7 @@ by fake code that modifies fake data:
 >>>
 >>>
 >>> def example_charm_logic(path):
-...     host.write_file(path, b"hello")
+...     host.write_file(path, b"hello", group="nogroup")
 >>>
 >>>
 >>> class ExampleTest(CharmTest):
@@ -126,22 +126,19 @@ by fake code that modifies fake data:
 ...    def test_charm_logic(self):
 ...        """Invoke our charm logic and inspect the resulting backend state."""
 ...
-...        # Setup the fake system users/groups backend, creating a fake "root"
-...        # user and group.
-...        self.users.add("root", 123)
-...        self.groups.add("root", 456)
+...        # Setup the fake system groups backend, creating a fake "nogroup"
+...        # group. The "root" user is already set up by default.
+...        self.groups.add("nogroup", 9999)
 ...
 ...        # Run our charm code.
 ...        path = str(self.filesystem.root.joinpath("foo"))
 ...        example_charm_logic(path)
 ...
 ...        # The file got written for real.
-...        with open(path) as fd:
-...            self.assertEqual("hello", fd.read())
+...        self.assertThat(path, FileContains("hello"))
 ...
 ...        # Perform assertions against the filesystem backend.
-...        self.assertEqual(123, self.filesystem.uid[path])
-...        self.assertEqual(456, self.filesystem.gid[path])
+...        self.assertThat(path, self.filesystem.hasOwner(0, 9999))
 >>>
 >>>
 >>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()

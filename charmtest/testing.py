@@ -39,6 +39,9 @@ class CharmTest(TestCase):
         self.unit = Unit()
         self.services = {}
 
+        self.users.add("root", 0)
+        self.groups.add("root", 0)
+
         self.processes.add(ConfigGet(self.application.config))
         self.processes.add(JujuLog(self.unit.log))
         self.processes.add(OpenPort(self.unit.ports))
