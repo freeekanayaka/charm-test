@@ -112,6 +112,7 @@ and stopping services:
 
 ```python
 >>> def example_charm_logic():
+...     host.service_stop("app")
 ...     host.service_start("app")
 >>>
 >>>
@@ -124,7 +125,7 @@ and stopping services:
 ...        example_charm_logic()
 ...
 ...        # Perform assertions against the services backend.
-...        self.assertEqual("started", self.services["app"])
+...        self.assertEqual(["stop", "start"], self.services["app"])
 ...        self.assertTrue(host.service_running("app"))
 >>>
 >>>
