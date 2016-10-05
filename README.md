@@ -10,7 +10,45 @@ and file system.
 
 # Examples
 
-## Hook tools
+## Juju environment variables
+
+The `CharmTest` base class uses an [EnvironmentVariable](https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/environ.py)
+fixture to set the environment variables that the charm code runtime
+expects:
+
+
+```python
+>>> from testtools.matchers import DirExists
+>>>
+>>> from charmtest import CharmTest
+>>>
+>>> from charmhelpers.core import hookenv
+>>>
+>>>
+>>> def example_charm_logic():
+...     return [
+...         hookenv.service_name(),
+...         hookenv.local_unit(),
+...         hookenv.charm_dir(),
+...     ]
+>>>
+>>>
+>>> class ExampleTest(CharmTest):
+...
+...    def test_charm_logic(self):
+...        """Invoke our charm logic and inspect the results."""
+...        result = example_charm_logic()
+...        self.assertEqual(self.application.name, result[0])
+...        self.assertEqual(self.unit.name, result[1])
+...        self.assertThat(result[2], DirExists())
+>>>
+>>>
+>>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+True
+
+```
+
+## Juju hook tools
 
 The `CharmTest` base class uses a [FakePopen](https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/popen.py)
 fixture to redirect calls to Python's `subprocess.Popen`.
@@ -26,11 +64,6 @@ utilities to execute hook tools, you can have tests like:
 
 
 ```python
->>> from charmtest import CharmTest
->>>
->>> from charmhelpers.core import hookenv
->>>
->>>
 >>> def example_charm_logic():
 ...     hookenv.log("Hello world!")
 ...     hookenv.open_port(1234)
@@ -59,9 +92,40 @@ True
 
 ```
 
+## Charm metadata, config and templates
+
+The `CharmTest` base class will traverse the process' all ancestors of the
+current working directory, until it finds a directory containing a file
+named "metadata.yaml". That directory will be considered the code tree of the
+charm under test. Charm metadata, default config values and templates will
+be made available to the underlying tests:
+
+```python
+>>> def example_charm_logic():
+...     return [
+...        hookenv.metadata()["summary"],
+...        hookenv.config()["foo"],
+...        os.path.exists(os.path.join(hookenv.charm_dir(), "templates")),
+...     ]
+>>>
+>>>
+>>> class ExampleTest(CharmTest):
+...
+...    def test_charm_logic(self):
+...        """Invoke our charm logic and inspect the results."""
+
+...        result = example_charm_logic()
+...        self.assertEqual(["Test charm", "bar", True], result)
+>>>
+>>>
+>>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+True
+
+```
+
 ## Filesystem
 
-The `CharmTest` base class also uses a [TempDir](https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/tempdir.py)
+The `CharmTest` base class uses a [TempDir](https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/tempdir.py)
 fixture to create a temporary directory to use as filesystem "root". The idea
 is that charm code should be factored in a way that it writes or reads files
 using paths relative to a certain root.
@@ -73,14 +137,14 @@ be executed in unit tests, that typically run as unpriviliged user:
 ```python
 >>> import os
 >>>
+>>> from charmhelpers.core import templating
+>>>
 >>> from testtools.matchers import FileContains
 >>>
 >>>
 >>> def example_charm_logic(root):
 ...     path = os.path.join(root, "etc", "app", "app.conf")
-...     with open(path, "w") as fd:
-...         fd.write("hello")
-...     os.chown(path, 0, 0)
+...     templating.render("app.conf", path, {"user": "John"})
 >>>
 >>>
 >>> class ExampleTest(CharmTest):
@@ -96,7 +160,7 @@ be executed in unit tests, that typically run as unpriviliged user:
 ...
 ...        # Perform assertions against the fake filesystem backend.
 ...        path = self.filesystem.join("etc", "app", "app.conf")
-...        self.assertThat(path, FileContains("hello"))
+...        self.assertThat(path, FileContains("Hello John!"))
 ...        self.assertThat(path, self.filesystem.hasOwner(0, 0))
 >>>
 >>>
@@ -146,7 +210,7 @@ True
 
 ```
 
-## Services
+## System services
 
 The `CharmTest` base class adds a fake `systemctl` process to track starting
 and stopping services:
