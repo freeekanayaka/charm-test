@@ -36,7 +36,6 @@ expects (for instance when calling the associated `charmhelpers` APIs):
 >>> class ExampleTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
-...        """Invoke our charm logic and inspect the results."""
 ...        result = example_charm_logic()
 ...        self.assertEqual("test", result["service-name"])
 ...        self.assertEqual("test/0", result["local-unit"])
@@ -73,15 +72,8 @@ utilities to execute hook tools, you can have tests like:
 >>> class ExampleTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
-...        """Invoke our charm logic and inspect the resulting backend state."""
-...
-...        # Setup the fake Juju backend application config.
-...        self.application.config["foo"] = "bar"
-...
-...        # Run our charm code.
+...        self.application.config["foo"] = "bar"  # Set the fake Juju config
 ...        result = example_charm_logic()
-...
-...        # Perform assertions against the fake Juju backend.
 ...        self.assertEqual("INFO: Hello world!", self.unit.log[0])
 ...        self.assertEqual("bar", result)
 ...        self.assertEqual({1234}, self.unit.ports["TCP"])
@@ -114,7 +106,6 @@ be made available to the underlying tests:
 >>> class ExampleTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
-...        """Invoke our charm logic and inspect the results."""
 ...        result = example_charm_logic()
 ...        self.assertEqual({
 ...            "summary": "Test charm",
@@ -153,15 +144,8 @@ be executed in unit tests, that typically run as unpriviliged user:
 >>> class ExampleTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
-...        """Invoke our charm logic and inspect the resulting backend state."""
-...
-...        # Setup the etc directory in fake filesystem root.
-...        self.filesystem.add("etc/app/")
-...
-...        # Run our charm code.
+...        self.filesystem.add("etc/app/")  # Create the etc/app directory
 ...        example_charm_logic(str(self.filesystem.root))
-...
-...        # Perform assertions against the fake filesystem backend.
 ...        path = self.filesystem.join("etc", "app", "app.conf")
 ...        self.assertThat(path, FileContains("Hello John!"))
 ...        self.assertThat(path, self.filesystem.hasOwner(0, 0))
@@ -191,20 +175,15 @@ by fake code that modifies fake data:
 >>> class ExampleTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
-...        """Invoke our charm logic and inspect the resulting backend state."""
 ...
 ...        # Setup the fake system groups backend, creating a fake "nogroup"
 ...        # group. The "root" user is already set up by default.
 ...        self.groups.add("nogroup", 9999)
 ...
-...        # Run our charm code.
 ...        path = str(self.filesystem.root.joinpath("foo"))
 ...        example_charm_logic(path)
 ...
-...        # The file got written for real.
 ...        self.assertThat(path, FileContains("hello"))
-...
-...        # Perform assertions against the filesystem backend.
 ...        self.assertThat(path, self.filesystem.hasOwner(0, 9999))
 >>>
 >>>
@@ -227,12 +206,7 @@ and stopping services:
 >>> class ExampleTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
-...        """Invoke our charm logic and inspect the resulting backend state."""
-...
-...        # Run our charm code.
 ...        example_charm_logic()
-...
-...        # Perform assertions against the services backend.
 ...        self.assertEqual(["stop", "start"], self.services["app"])
 ...        self.assertTrue(host.service_running("app"))
 >>>
@@ -258,15 +232,34 @@ URLs from the network:
 >>> class ExampleTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
-...        """Invoke our charm logic and inspect the results."""
-...
-...        # Setup a fake URL location.
-...        self.network["http://x"] = b"data"
-...
-...        # Run our charm code.
+...        self.network["http://x"] = b"data"  # Setup a fake URL location.
 ...        result = example_charm_logic()
-...
 ...        self.assertEqual(b"data", result)
+>>>
+>>>
+>>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+True
+
+```
+
+## Packages
+
+The `CharmTest` base class adds a fake `dpkg` process to simulate installing
+Debian packages:
+
+```python
+>>> import subprocess
+>>>
+>>>
+>>> def example_charm_logic():
+...     return subprocess.check_output(("dpkg", "-i", "foo"))
+>>>
+>>>
+>>> class ExampleTest(CharmTest):
+...
+...    def test_charm_logic(self):
+...        example_charm_logic()
+...        self.assertEqual(["install"], self.packages["foo"])
 >>>
 >>>
 >>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()

@@ -3,7 +3,7 @@ from testtools import TestCase
 from charmtest.services import Systemctl
 
 
-class ConfigGetTest(TestCase):
+class SystemctlTest(TestCase):
 
     def setUp(self):
         super().setUp()
