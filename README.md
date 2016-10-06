@@ -126,6 +126,10 @@ fixture to create a temporary directory to use as filesystem "root". The idea
 is that charm code should be factored in a way that it writes or reads files
 using paths relative to a certain root.
 
+To this extent, a `TEST_ROOT_DIR` environment variable is exported by
+`CharmTest` in order to let charm code decide which actual root
+path to use (see the example below).
+
 A [MonkeyPatch](https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/monkeypatch.py)
 is used to capture calls to Python's `os.chown` and `os.fchown`, so they can
 be executed in unit tests, that typically run as unpriviliged user:
@@ -136,7 +140,8 @@ be executed in unit tests, that typically run as unpriviliged user:
 >>> from testtools.matchers import FileContains
 >>>
 >>>
->>> def example_charm_logic(root):
+>>> def example_charm_logic():
+...     root = os.environ.get("TEST_ROOT_DIR", "/")
 ...     path = os.path.join(root, "etc", "app", "app.conf")
 ...     templating.render("app.conf", path, {"user": "John"})
 >>>
@@ -145,7 +150,7 @@ be executed in unit tests, that typically run as unpriviliged user:
 ...
 ...    def test_charm_logic(self):
 ...        self.fakes.fs.add("etc/app/")  # Create the etc/app directory
-...        example_charm_logic(str(self.fakes.fs.root))
+...        example_charm_logic()
 ...        path = self.fakes.fs.join("etc", "app", "app.conf")
 ...        self.assertThat(path, FileContains("Hello John!"))
 ...        self.assertThat(path, self.fakes.fs.hasOwner(0, 0))
@@ -168,7 +173,8 @@ by fake code that modifies fake data:
 >>> from charmhelpers.core import host
 >>>
 >>>
->>> def example_charm_logic(path):
+>>> def example_charm_logic():
+...     path = os.path.join(os.environ.get("TEST_ROOT_DIR", "/"), "foo")
 ...     host.write_file(path, b"hello", group="nogroup")
 >>>
 >>>
@@ -180,9 +186,9 @@ by fake code that modifies fake data:
 ...        # group. The "root" user is already set up by default.
 ...        self.fakes.groups.add("nogroup", 9999)
 ...
-...        path = str(self.fakes.fs.root.joinpath("foo"))
-...        example_charm_logic(path)
+...        example_charm_logic()
 ...
+...        path = str(self.fakes.fs.root.joinpath("foo"))
 ...        self.assertThat(path, FileContains("hello"))
 ...        self.assertThat(path, self.fakes.fs.hasOwner(0, 9999))
 >>>
