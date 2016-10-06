@@ -15,7 +15,7 @@ from fixtures import (
 )
 
 
-class Filesystem(Fixture):
+class FakeFilesystem(Fixture):
     """A temporary filesystem tree."""
 
     def _setUp(self):

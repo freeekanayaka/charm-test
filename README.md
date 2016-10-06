@@ -33,7 +33,7 @@ expects (for instance when calling the associated `charmhelpers` APIs):
 ...     }
 >>>
 >>>
->>> class ExampleTest(CharmTest):
+>>> class ExampleCharmTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
 ...        result = example_charm_logic()
@@ -42,7 +42,7 @@ expects (for instance when calling the associated `charmhelpers` APIs):
 ...        self.assertThat(result["charm-dir"], DirExists())
 >>>
 >>>
->>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+>>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
 True
 
 ```
@@ -69,17 +69,17 @@ utilities to execute hook tools, you can have tests like:
 ...     return hookenv.config()["foo"]
 >>>
 >>>
->>> class ExampleTest(CharmTest):
+>>> class ExampleCharmTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
-...        self.application.config["foo"] = "bar"  # Set the fake Juju config
+...        self.fakes.juju.config["foo"] = "bar"
 ...        result = example_charm_logic()
-...        self.assertEqual("INFO: Hello world!", self.unit.log[0])
+...        self.assertEqual("INFO: Hello world!", self.fakes.juju.log[0])
 ...        self.assertEqual("bar", result)
-...        self.assertEqual({1234}, self.unit.ports["TCP"])
+...        self.assertEqual({1234}, self.fakes.juju.ports["TCP"])
 >>>
 >>>
->>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+>>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
 True
 
 ```
@@ -103,7 +103,7 @@ be made available to the underlying tests:
 ...     }
 >>>
 >>>
->>> class ExampleTest(CharmTest):
+>>> class ExampleCharmTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
 ...        result = example_charm_logic()
@@ -114,7 +114,7 @@ be made available to the underlying tests:
 ...            result)
 >>>
 >>>
->>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+>>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
 True
 
 ```
@@ -141,17 +141,17 @@ be executed in unit tests, that typically run as unpriviliged user:
 ...     templating.render("app.conf", path, {"user": "John"})
 >>>
 >>>
->>> class ExampleTest(CharmTest):
+>>> class ExampleCharmTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
-...        self.filesystem.add("etc/app/")  # Create the etc/app directory
-...        example_charm_logic(str(self.filesystem.root))
-...        path = self.filesystem.join("etc", "app", "app.conf")
+...        self.fakes.fs.add("etc/app/")  # Create the etc/app directory
+...        example_charm_logic(str(self.fakes.fs.root))
+...        path = self.fakes.fs.join("etc", "app", "app.conf")
 ...        self.assertThat(path, FileContains("Hello John!"))
-...        self.assertThat(path, self.filesystem.hasOwner(0, 0))
+...        self.assertThat(path, self.fakes.fs.hasOwner(0, 0))
 >>>
 >>>
->>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+>>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
 True
 
 ```
@@ -172,22 +172,22 @@ by fake code that modifies fake data:
 ...     host.write_file(path, b"hello", group="nogroup")
 >>>
 >>>
->>> class ExampleTest(CharmTest):
+>>> class ExampleCharmTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
 ...
 ...        # Setup the fake system groups backend, creating a fake "nogroup"
 ...        # group. The "root" user is already set up by default.
-...        self.groups.add("nogroup", 9999)
+...        self.fakes.groups.add("nogroup", 9999)
 ...
-...        path = str(self.filesystem.root.joinpath("foo"))
+...        path = str(self.fakes.fs.root.joinpath("foo"))
 ...        example_charm_logic(path)
 ...
 ...        self.assertThat(path, FileContains("hello"))
-...        self.assertThat(path, self.filesystem.hasOwner(0, 9999))
+...        self.assertThat(path, self.fakes.fs.hasOwner(0, 9999))
 >>>
 >>>
->>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+>>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
 True
 
 ```
@@ -203,15 +203,15 @@ and stopping services:
 ...     host.service_start("app")
 >>>
 >>>
->>> class ExampleTest(CharmTest):
+>>> class ExampleCharmTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
 ...        example_charm_logic()
-...        self.assertEqual(["stop", "start"], self.services["app"])
+...        self.assertEqual(["stop", "start"], self.fakes.services["app"])
 ...        self.assertTrue(host.service_running("app"))
 >>>
 >>>
->>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+>>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
 True
 
 ```
@@ -229,15 +229,15 @@ URLs from the network:
 ...     return subprocess.check_output(("wget", "-O", "-", "http://x"))
 >>>
 >>>
->>> class ExampleTest(CharmTest):
+>>> class ExampleCharmTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
-...        self.network["http://x"] = b"data"  # Setup a fake URL location.
+...        self.fakes.network["http://x"] = b"data"
 ...        result = example_charm_logic()
 ...        self.assertEqual(b"data", result)
 >>>
 >>>
->>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+>>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
 True
 
 ```
@@ -252,17 +252,17 @@ Debian packages:
 >>>
 >>>
 >>> def example_charm_logic():
-...     return subprocess.check_output(("dpkg", "-i", "foo"))
+...     return subprocess.check_output(("dpkg", "-i", "foo_1.0-1.deb"))
 >>>
 >>>
->>> class ExampleTest(CharmTest):
+>>> class ExampleCharmTest(CharmTest):
 ...
 ...    def test_charm_logic(self):
 ...        example_charm_logic()
-...        self.assertEqual(["install"], self.packages["foo"])
+...        self.assertEqual(["install"], self.fakes.packages["foo"])
 >>>
 >>>
->>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+>>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
 True
 
 ```

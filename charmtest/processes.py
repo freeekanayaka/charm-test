@@ -1,7 +1,7 @@
 from fixtures import FakePopen
 
 
-class Processes(FakePopen):
+class FakeProcesses(FakePopen):
 
     def __init__(self):
         self._registry = {}

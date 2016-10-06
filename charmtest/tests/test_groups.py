@@ -2,14 +2,14 @@ import grp
 
 from testtools import TestCase
 
-from charmtest.groups import Groups
+from charmtest.groups import FakeGroups
 
 
-class GroupsTest(TestCase):
+class FakeGroupsTest(TestCase):
 
     def setUp(self):
         super().setUp()
-        self.groups = self.useFixture(Groups())
+        self.groups = self.useFixture(FakeGroups())
 
     def test_getgrname_root(self):
         info = grp.getgrnam("root")
