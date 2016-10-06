@@ -241,3 +241,35 @@ and stopping services:
 True
 
 ```
+
+## Network
+
+The `CharmTest` base class adds a fake `wget` process to simulate downloading
+URLs from the network:
+
+```python
+>>> import subprocess
+>>>
+>>>
+>>> def example_charm_logic():
+...     return subprocess.check_output(("wget", "-O", "-", "http://x"))
+>>>
+>>>
+>>> class ExampleTest(CharmTest):
+...
+...    def test_charm_logic(self):
+...        """Invoke our charm logic and inspect the results."""
+...
+...        # Setup a fake URL location.
+...        self.network["http://x"] = b"data"
+...
+...        # Run our charm code.
+...        result = example_charm_logic()
+...
+...        self.assertEqual(b"data", result)
+>>>
+>>>
+>>> ExampleTest(methodName="test_charm_logic").run().wasSuccessful()
+True
+
+```

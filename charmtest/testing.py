@@ -12,6 +12,7 @@ from charmtest.filesystem import Filesystem
 from charmtest.users import Users
 from charmtest.groups import Groups
 from charmtest.services import Systemctl
+from charmtest.network import Wget
 from charmtest.processes import Processes
 from charmtest.juju import (
     Application,
@@ -49,6 +50,7 @@ class CharmTest(TestCase):
         self.groups.add("root", 0)
 
         self.services = {}
+        self.network = {}
 
         self.useFixture(
             EnvironmentVariable("CHARM_DIR", self.filesystem.join(charm_dir)))
@@ -59,6 +61,7 @@ class CharmTest(TestCase):
         self.processes.add(JujuLog(self.unit.log))
         self.processes.add(OpenPort(self.unit.ports))
         self.processes.add(Systemctl(self.services))
+        self.processes.add(Wget(self.network))
 
         _create_symlink(code_dir, "metadata.yaml")
         _create_symlink(code_dir, "templates")
