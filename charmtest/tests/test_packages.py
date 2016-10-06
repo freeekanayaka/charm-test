@@ -11,5 +11,5 @@ class DpkgTest(TestCase):
         self.process = Dpkg(self.packages)
 
     def test_install(self):
-        self.process({"args": ["dpkg", "-i", "foo"]})
+        self.process({"args": ["dpkg", "-i", "foo_1.0-1.deb"]})
         self.assertEqual(["install"], self.packages["foo"])

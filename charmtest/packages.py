@@ -1,3 +1,5 @@
+import os
+
 import argparse
 
 
@@ -13,7 +15,10 @@ class Dpkg(object):
         parser.add_argument("-i", dest="install")
         args = parser.parse_args(proc_args["args"][1:])
         if args.install:
-            package = args.install
+            package = os.path.basename(args.install)
+            if package.endswith(".deb"):
+                package = package[:-len(".deb")]
+            package = package.split("_")[0]
             actions = self._packages.setdefault(package, [])
             actions.append("install")
         return {}
