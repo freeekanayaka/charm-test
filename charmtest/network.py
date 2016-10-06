@@ -14,7 +14,7 @@ class Wget(object):
         parser.add_argument("url")
         parser.add_argument("-O", dest="output")
         parser.add_argument("-q", dest="quiet", action="store_true")
-        parser.add_argument("-no-check-certificate", action="store_true")
+        parser.add_argument("--no-check-certificate", action="store_true")
         args = parser.parse_args(proc_args["args"][1:])
         content = self._network[args.url]
         result = {}
