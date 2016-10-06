@@ -3,14 +3,14 @@ import os
 from testtools import TestCase
 from fixtures import TempDir
 
-from charmtest.filesystem import Filesystem
+from charmtest.filesystem import FakeFilesystem
 
 
-class FilesystemTest(TestCase):
+class FakeFilesystemTest(TestCase):
 
     def setUp(self):
         super().setUp()
-        self.filesystem = self.useFixture(Filesystem())
+        self.filesystem = self.useFixture(FakeFilesystem())
 
     def test_root_dir_environment_variable(self):
         self.assertEqual(

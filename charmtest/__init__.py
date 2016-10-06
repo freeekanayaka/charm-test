@@ -2,6 +2,7 @@ import platform
 
 from testtools import try_import
 
+from .fixture import CharmFakes
 from .testing import CharmTest
 
 # XXX Force 'ubuntu' as platform, since charmhelpers.core.host doesn't like
@@ -16,5 +17,6 @@ if host:
 
 
 __all__ = [
+    "CharmFakes",
     "CharmTest",
 ]

@@ -2,14 +2,14 @@ import pwd
 
 from testtools import TestCase
 
-from charmtest.users import Users
+from charmtest.users import FakeUsers
 
 
-class UsersTest(TestCase):
+class FakeUsersTest(TestCase):
 
     def setUp(self):
         super().setUp()
-        self.users = self.useFixture(Users())
+        self.users = self.useFixture(FakeUsers())
 
     def test_getwdname_root(self):
         info = pwd.getpwnam("root")

@@ -6,7 +6,7 @@ from fixtures import (
 )
 
 
-class Users(Fixture):
+class FakeUsers(Fixture):
 
     def _setUp(self):
         self.data = {"root": ("x", 0, 0, "root", "/root", "/bin/bash")}

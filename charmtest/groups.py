@@ -6,7 +6,7 @@ from fixtures import (
 )
 
 
-class Groups(Fixture):
+class FakeGroups(Fixture):
 
     def _setUp(self):
         self.data = {"root": ("x", 0, [])}
