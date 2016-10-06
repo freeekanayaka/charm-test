@@ -6,7 +6,7 @@ from fixtures import TempDir
 from charmtest.network import Wget
 
 
-class ConfigGetTest(TestCase):
+class WgetTest(TestCase):
 
     def setUp(self):
         super().setUp()

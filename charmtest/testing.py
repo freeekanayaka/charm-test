@@ -14,6 +14,7 @@ from charmtest.groups import Groups
 from charmtest.services import Systemctl
 from charmtest.network import Wget
 from charmtest.processes import Processes
+from charmtest.packages import Dpkg
 from charmtest.juju import (
     Application,
     Unit,
@@ -51,6 +52,7 @@ class CharmTest(TestCase):
 
         self.services = {}
         self.network = {}
+        self.packages = {}
 
         self.useFixture(
             EnvironmentVariable("CHARM_DIR", self.filesystem.join(charm_dir)))
@@ -62,6 +64,7 @@ class CharmTest(TestCase):
         self.processes.add(OpenPort(self.unit.ports))
         self.processes.add(Systemctl(self.services))
         self.processes.add(Wget(self.network))
+        self.processes.add(Dpkg(self.packages))
 
         _create_symlink(code_dir, "metadata.yaml")
         _create_symlink(code_dir, "templates")
