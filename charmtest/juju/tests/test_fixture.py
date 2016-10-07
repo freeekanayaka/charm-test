@@ -9,8 +9,11 @@ from subprocess import (
 from testtools import TestCase
 from testtools.matchers import DirExists
 
-from charmtest.filesystem import FakeFilesystem
-from charmtest.processes import FakeProcesses
+from systemfixtures import (
+    FakeFilesystem,
+    FakeProcesses,
+)
+
 from charmtest.juju.fixture import FakeJuju
 
 

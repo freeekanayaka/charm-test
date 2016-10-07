@@ -2,11 +2,16 @@
 
 [![Build Status](https://travis-ci.org/freeekanayaka/charm-test.svg?branch=master)](https://travis-ci.org/freeekanayaka/charm-test)
 
-A collection of Python [fixtures](https://github.com/testing-cabal/fixtures)
-to fake out the boundaries of a Juju charm and allow convenient unit-testing.
+This package sports a collection of helpers for unit-testing Juju charms.
 
-The boundaries are typically executables (e.g. Juju hook tools), network
-and file system.
+In particular, it extends [system-fixtures](https://github.com/freeekanayaka/system-fixtures)
+by faking out hook tools processes (`config-get`, `juju-log`, etc), so
+authors have a complete suite of fakes for the typical "boundaries"
+of a Juju charm.
+
+The examples below cover the Juju fake boundaries part, for documentation
+about the rest of fake boundaries (file system, processes, network, users,
+groups, etc) see the `system-fixtures` [home page](https://github.com/freeekanayaka/system-fixtures).
 
 # Examples
 
@@ -112,160 +117,6 @@ be made available to the underlying tests:
 ...            "config-foo": "abc",
 ...            "has-templates-dir": True},
 ...            result)
->>>
->>>
->>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
-True
-
-```
-
-## Filesystem
-
-The `CharmTest` base class uses a [TempDir](https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/tempdir.py)
-fixture to create a temporary directory to use as filesystem "root". The idea
-is that charm code should be factored in a way that it writes or reads files
-using paths relative to a certain root.
-
-To this extent, a `TEST_ROOT_DIR` environment variable is exported by
-`CharmTest` in order to let charm code decide which actual root
-path to use (see the example below).
-
-A [MonkeyPatch](https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/monkeypatch.py)
-is used to capture calls to Python's `os.chown` and `os.fchown`, so they can
-be executed in unit tests, that typically run as unpriviliged user:
-
-```python
->>> from charmhelpers.core import templating
->>>
->>> from testtools.matchers import FileContains
->>>
->>>
->>> def example_charm_logic():
-...     root = os.environ.get("TEST_ROOT_DIR", "/")
-...     path = os.path.join(root, "etc", "app", "app.conf")
-...     templating.render("app.conf", path, {"user": "John"})
->>>
->>>
->>> class ExampleCharmTest(CharmTest):
-...
-...    def test_charm_logic(self):
-...        self.fakes.fs.add("etc/app/")  # Create the etc/app directory
-...        example_charm_logic()
-...        path = self.fakes.fs.join("etc", "app", "app.conf")
-...        self.assertThat(path, FileContains("Hello John!"))
-...        self.assertThat(path, self.fakes.fs.hasOwner(0, 0))
->>>
->>>
->>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
-True
-
-```
-
-## Users and groups
-
-The `CharmTest` base class mocks out calls to Python's `grp.getpwnam`
-and `grp.getgrnam`.
-
-Like in the Juju hook tools case above, calls to these APIs will be handled
-by fake code that modifies fake data:
-
-```python
->>> from charmhelpers.core import host
->>>
->>>
->>> def example_charm_logic():
-...     path = os.path.join(os.environ.get("TEST_ROOT_DIR", "/"), "foo")
-...     host.write_file(path, b"hello", group="nogroup")
->>>
->>>
->>> class ExampleCharmTest(CharmTest):
-...
-...    def test_charm_logic(self):
-...
-...        # Setup the fake system groups backend, creating a fake "nogroup"
-...        # group. The "root" user is already set up by default.
-...        self.fakes.groups.add("nogroup", 9999)
-...
-...        example_charm_logic()
-...
-...        path = str(self.fakes.fs.root.joinpath("foo"))
-...        self.assertThat(path, FileContains("hello"))
-...        self.assertThat(path, self.fakes.fs.hasOwner(0, 9999))
->>>
->>>
->>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
-True
-
-```
-
-## System services
-
-The `CharmTest` base class adds a fake `systemctl` process to track starting
-and stopping services:
-
-```python
->>> def example_charm_logic():
-...     host.service_stop("app")
-...     host.service_start("app")
->>>
->>>
->>> class ExampleCharmTest(CharmTest):
-...
-...    def test_charm_logic(self):
-...        example_charm_logic()
-...        self.assertEqual(["stop", "start"], self.fakes.services["app"])
-...        self.assertTrue(host.service_running("app"))
->>>
->>>
->>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
-True
-
-```
-
-## Network
-
-The `CharmTest` base class adds a fake `wget` process to simulate downloading
-URLs from the network:
-
-```python
->>> import subprocess
->>>
->>>
->>> def example_charm_logic():
-...     return subprocess.check_output(("wget", "-O", "-", "http://x"))
->>>
->>>
->>> class ExampleCharmTest(CharmTest):
-...
-...    def test_charm_logic(self):
-...        self.fakes.network["http://x"] = b"data"
-...        result = example_charm_logic()
-...        self.assertEqual(b"data", result)
->>>
->>>
->>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
-True
-
-```
-
-## Packages
-
-The `CharmTest` base class adds a fake `dpkg` process to simulate installing
-Debian packages:
-
-```python
->>> import subprocess
->>>
->>>
->>> def example_charm_logic():
-...     return subprocess.check_output(("dpkg", "-i", "foo_1.0-1.deb"))
->>>
->>>
->>> class ExampleCharmTest(CharmTest):
-...
-...    def test_charm_logic(self):
-...        example_charm_logic()
-...        self.assertEqual(["install"], self.fakes.packages["foo"])
 >>>
 >>>
 >>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
