@@ -1,9 +1,20 @@
 import platform
 
+from pbr.version import VersionInfo
+
 from testtools import try_import
 
 from .fixture import CharmFakes
 from .testing import CharmTest
+
+__all__ = [
+    "CharmFakes",
+    "CharmTest",
+]
+
+_v = VersionInfo("system-fixtures").semantic_version()
+__version__ = _v.release_string()
+version_info = _v.version_tuple()
 
 # XXX Force 'ubuntu' as platform, since charmhelpers.core.host doesn't like
 # 'debian' (which is what you get on Travis).
@@ -14,9 +25,3 @@ host = try_import("charmhelpers.core.host")
 
 if host:
     host.init_is_systemd = lambda: True
-
-
-__all__ = [
-    "CharmFakes",
-    "CharmTest",
-]
