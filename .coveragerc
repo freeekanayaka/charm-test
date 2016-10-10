@@ -1,0 +1,5 @@
+[run]
+source = charmtest
+
+[report]
+fail_under=100
