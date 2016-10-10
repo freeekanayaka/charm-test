@@ -4,6 +4,11 @@ python:
 
 install:
  - pip install tox
+ - pip install python-coveralls
 
 script:
  - tox
+
+after_success:
+  - coveralls
+

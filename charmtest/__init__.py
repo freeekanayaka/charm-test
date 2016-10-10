@@ -12,7 +12,7 @@ __all__ = [
     "CharmTest",
 ]
 
-_v = VersionInfo("system-fixtures").semantic_version()
+_v = VersionInfo("charm-test").semantic_version()
 __version__ = _v.release_string()
 version_info = _v.version_tuple()
 

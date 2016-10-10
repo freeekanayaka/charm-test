@@ -4,14 +4,14 @@
 
 This package sports a collection of helpers for unit-testing Juju charms.
 
-In particular, it extends [system-fixtures](https://github.com/freeekanayaka/system-fixtures)
+In particular, it extends [systemfixtures](https://github.com/freeekanayaka/system-fixtures)
 by faking out hook tools processes (`config-get`, `juju-log`, etc), so
 authors have a complete suite of fakes for the typical "boundaries"
 of a Juju charm.
 
 The examples below cover the Juju fake boundaries part, for documentation
 about the rest of fake boundaries (file system, processes, network, users,
-groups, etc) see the `system-fixtures` [home page](https://github.com/freeekanayaka/system-fixtures).
+groups, etc) see the `systemfixtures` [home page](https://github.com/freeekanayaka/system-fixtures).
 
 # Examples
 
