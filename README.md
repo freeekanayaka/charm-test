@@ -1,6 +1,6 @@
-# Overview
+[![Build Status](https://travis-ci.org/freeekanayaka/charm-test.svg?branch=master)](https://travis-ci.org/freeekanayaka/charm-test) [![Coverage Status](https://coveralls.io/repos/github/freeekanayaka/charm-test/badge.svg?branch=master)](https://coveralls.io/github/freeekanayaka/charm-test?branch=master)
 
-[![Build Status](https://travis-ci.org/freeekanayaka/charm-test.svg?branch=master)](https://travis-ci.org/freeekanayaka/charm-test)
+# Overview
 
 This package sports a collection of helpers for unit-testing Juju charms.
 
