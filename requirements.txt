@@ -1,5 +1,5 @@
 pbr
 -e git+git://github.com/freeekanayaka/fixtures@master#egg=fixtures-3.0.1
--e git+git://github.com/freeekanayaka/system-fixtures@master#egg=systemfixtures
+system-fixtures>=0.2.5
 testtools
 charmhelpers
