@@ -1,6 +1,8 @@
-charmtest.egg-info
 dist
 env
 __pycache__
 .coverage
 .tox
+AUTHORS
+ChangeLog
+charm_test.egg-info/
