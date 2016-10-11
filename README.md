@@ -127,7 +127,7 @@ True
 ## Processes, network, file system, users, groups, etc.
 
 The `CharmTest` base class also sets up a number of useful fixtures from
-the `systemfixtures` package. See [here](https://github.com/freeekanayaka/system-fixtures)
+the `systemfixtures` package. See its [project home page](https://github.com/freeekanayaka/system-fixtures)
 for further documentation:
 
 ```python
