@@ -9,7 +9,7 @@ by faking out hook tools processes (`config-get`, `juju-log`, etc), so
 authors have a complete suite of fakes for the typical "boundaries"
 of a Juju charm.
 
-The examples below cover the Juju fake boundaries part, for documentation
+The examples below cover the Juju-related boundaries part, for documentation
 about the rest of fake boundaries (file system, processes, network, users,
 groups, etc) see the `systemfixtures` [home page](https://github.com/freeekanayaka/system-fixtures).
 
@@ -123,3 +123,7 @@ be made available to the underlying tests:
 True
 
 ```
+
+## Processes, network, file system, users, groups, etc.
+
+See the `systemfixtures` [home page](https://github.com/freeekanayaka/system-fixtures).
