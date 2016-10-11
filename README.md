@@ -126,4 +126,20 @@ True
 
 ## Processes, network, file system, users, groups, etc.
 
-See the `systemfixtures` [home page](https://github.com/freeekanayaka/system-fixtures).
+The `CharmTest` base class also sets up a number of useful fixtures from
+the `systemfixtures` package. See [here](https://github.com/freeekanayaka/system-fixtures)
+for further documentation:
+
+```python
+>>> class ExampleCharmTest(CharmTest):
+...
+...    def test_other_fakes(self):
+...        self.assertTrue(self.fakes.processes)
+...        self.assertTrue(self.fakes.fs)
+...        self.assertTrue(self.fakes.users)
+...        self.assertTrue(self.fakes.groups)
+>>>
+>>> ExampleCharmTest(methodName="test_other_fakes").run().wasSuccessful()
+True
+
+```
