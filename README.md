@@ -138,6 +138,7 @@ for further documentation:
 ...        self.assertTrue(self.fakes.fs)
 ...        self.assertTrue(self.fakes.users)
 ...        self.assertTrue(self.fakes.groups)
+...        self.assertTrue(self.fakes.network)
 >>>
 >>> ExampleCharmTest(methodName="test_other_fakes").run().wasSuccessful()
 True
