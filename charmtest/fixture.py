@@ -5,6 +5,7 @@ from systemfixtures import (
     FakeUsers,
     FakeGroups,
     FakeProcesses,
+    FakeNetwork,
 )
 from systemfixtures.processes import (
     Systemctl,
@@ -23,6 +24,7 @@ class CharmFakes(Fixture):
         self.users = self.useFixture(FakeUsers())
         self.groups = self.useFixture(FakeGroups())
         self.processes = self.useFixture(FakeProcesses())
+        self.network = self.useFixture(FakeNetwork())
         self.juju = self.useFixture(FakeJuju(self.fs, self.processes))
 
         self.processes.add(Systemctl())
