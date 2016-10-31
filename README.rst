@@ -13,6 +13,10 @@ Charm Test
     :target: https://coveralls.io/github/freeekanayaka/charm-test?branch=master
     :alt: Coverage
 
+.. image:: https://readthedocs.org/projects/charm-test/badge/?version=latest
+    :target: http://charm-test.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
 This package sports a collection of helpers for unit-testing Juju charms.
 
 In particular, it extends systemfixtures_ by faking out hook tools
@@ -53,7 +57,7 @@ of fakes for the typical "boundaries" of a Juju charm.
 Support and Documentation
 -------------------------
 
-See the `online documentation <http://pythonhosted.org/charm-test/>`_ for
+See the `online documentation <http://charm-test.readthedocs.io//>`_ for
 a complete reference.
 
 Developing and Contributing
