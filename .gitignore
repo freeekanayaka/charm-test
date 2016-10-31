@@ -1,6 +1,6 @@
 dist
-env
 __pycache__
+*.pyc
 .coverage
 .tox
 AUTHORS

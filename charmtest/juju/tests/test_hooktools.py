@@ -9,7 +9,7 @@ from charmtest.juju.hooktools import (
 class ConfigGetTest(TestCase):
 
     def setUp(self):
-        super().setUp()
+        super(ConfigGetTest, self).setUp()
         self.config = {}
         self.process = ConfigGet(self.config)
 
@@ -22,7 +22,7 @@ class ConfigGetTest(TestCase):
 class JujuLogTest(TestCase):
 
     def setUp(self):
-        super().setUp()
+        super(JujuLogTest, self).setUp()
         self.log = []
         self.process = JujuLog(self.log)
 

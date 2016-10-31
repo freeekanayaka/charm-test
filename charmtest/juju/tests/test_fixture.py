@@ -20,7 +20,7 @@ from charmtest.juju.fixture import FakeJuju
 class FakeJujuTest(TestCase):
 
     def setUp(self):
-        super().setUp()
+        super(FakeJujuTest, self).setUp()
         self.fs = self.useFixture(FakeFilesystem())
         self.processes = self.useFixture(FakeProcesses())
         self.juju = self.useFixture(FakeJuju(self.fs, self.processes))
