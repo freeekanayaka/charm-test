@@ -8,6 +8,7 @@ from fixtures import (
 
 from testtools import try_import
 
+from charmtest.paths import find_code_dir
 from charmtest.juju.hooktools import (
     ConfigGet,
     JujuLog,
@@ -20,12 +21,12 @@ hookenv = try_import("charmhelpers.core.hookenv")
 class FakeJuju(Fixture):
 
     def __init__(self, filesystem, processes):
-        super().__init__()
+        super(Fixture, self).__init__()
         self._fs = filesystem
         self._processes = processes
 
     def _setUp(self):
-        code_dir = self._find_code_dir()
+        code_dir = find_code_dir()
         unit_name = self._unit_name(code_dir)
         charm_dir = self._charm_dir(unit_name)
 
@@ -47,14 +48,6 @@ class FakeJuju(Fixture):
 
         # If charmhelpers is around, clear its config cache.
         hookenv and hookenv.cache.clear()
-
-    def _find_code_dir(self):
-        directory = os.getcwd()
-        while directory != "/":
-            if os.path.exists(os.path.join(directory, "metadata.yaml")):
-                return directory
-        else:  # pragma: no cover
-            raise RuntimeError("This doesn't seem to be a charm code tree")
 
     def _unit_name(self, code_dir):
         with open(os.path.join(code_dir, "metadata.yaml")) as fd:

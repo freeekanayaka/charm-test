@@ -6,7 +6,7 @@ from charmtest.fixture import CharmFakes
 class CharmFakesTest(TestCase):
 
     def setUp(self):
-        super().setUp()
+        super(CharmFakesTest, self).setUp()
         self.fakes = self.useFixture(CharmFakes())
 
     def test_attributes(self):
