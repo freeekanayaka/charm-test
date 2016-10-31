@@ -6,3 +6,4 @@ __pycache__
 AUTHORS
 ChangeLog
 charm_test.egg-info/
+docs/_build
