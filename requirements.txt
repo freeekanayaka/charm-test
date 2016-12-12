@@ -1,5 +1,5 @@
 pbr
 fixtures
-systemfixtures>=0.2.7
+systemfixtures>=0.6.0
 testtools
 charmhelpers
