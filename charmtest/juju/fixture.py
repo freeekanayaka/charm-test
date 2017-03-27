@@ -30,12 +30,13 @@ class FakeJuju(Fixture):
         unit_name = self._unit_name(code_dir)
         charm_dir = self._charm_dir(unit_name)
 
+        self.config = self._default_config(code_dir)
+
         self._fs.add("/var")
         os.makedirs(charm_dir)
         self._create_symlink(code_dir, charm_dir, "metadata.yaml")
         self._create_symlink(code_dir, charm_dir, "templates")
 
-        self.config = self._default_config(code_dir)
         self.log = []
         self.ports = {}
 
