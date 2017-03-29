@@ -95,6 +95,7 @@ utilities to execute hook tools, you can have tests like:
    ...        self.assertEqual("INFO: Hello world!", self.fakes.juju.log[0])
    ...        self.assertEqual("bar", result)
    ...        self.assertEqual({1234}, self.fakes.juju.ports["TCP"])
+   ...        self.assertEqual("10.1.2.3", hookenv.unit_private_ip())
 
    >>> ExampleCharmTest(methodName="test_charm_logic").run().wasSuccessful()
    True

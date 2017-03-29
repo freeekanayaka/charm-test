@@ -13,6 +13,7 @@ from charmtest.juju.hooktools import (
     ConfigGet,
     JujuLog,
     OpenPort,
+    UnitGet,
 )
 
 hookenv = try_import("charmhelpers.core.hookenv")
@@ -39,6 +40,10 @@ class FakeJuju(Fixture):
 
         self.log = []
         self.ports = {}
+        self.unit_data = {
+            "private-address": "10.1.2.3",
+            "public-address": "",
+        }
 
         self.useFixture(EnvironmentVariable("JUJU_UNIT_NAME", unit_name))
         self.useFixture(EnvironmentVariable("CHARM_DIR", charm_dir))
@@ -46,6 +51,7 @@ class FakeJuju(Fixture):
         self._processes.add(ConfigGet(self.config))
         self._processes.add(JujuLog(self.log))
         self._processes.add(OpenPort(self.ports))
+        self._processes.add(UnitGet(self.unit_data))
 
         # If charmhelpers is around, clear its config cache.
         hookenv and hookenv.cache.clear()

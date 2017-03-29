@@ -46,3 +46,7 @@ class FakeJujuTest(TestCase):
     def test_port(self):
         check_call(["open-port", "1234/TCP"])
         self.assertEqual({1234}, self.juju.ports["TCP"])
+
+    def test_unit_get(self):
+        self.assertEqual(
+            b"10.1.2.3\n", check_output(["unit-get", "private-address"]))
