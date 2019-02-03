@@ -23,7 +23,7 @@ In particular, it extends systemfixtures_ by faking out hook tools
 processes (`config-get`, `juju-log`, etc), so authors have a complete suite
 of fakes for the typical "boundaries" of a Juju charm.
 
-.. _systemfixtures: https://github.com/freeekanayaka/system-fixtures
+.. _systemfixtures: https://github.com/testing-cabal/systemfixtures
 
 .. code:: python
 
